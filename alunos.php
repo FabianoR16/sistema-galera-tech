@@ -505,7 +505,7 @@ include 'includes/header.php';
                                             <a href="alunos.php?editar=<?php echo $aluno['id']; ?>" class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="alunos.php?excluir=<?php echo $aluno['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este aluno?');">
+                                            <a href="alunos.php?excluir=<?php echo $aluno['id']; ?>" class="btn btn-sm btn-danger mt-2" onclick="return confirm('Tem certeza que deseja excluir este aluno?');">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </td>
