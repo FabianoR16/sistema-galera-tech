@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['filtrar'])) {
     <div class="card-header bg-primary text-white">
         <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Relatórios</h5>
     </div>
-    <div class="card-body">
+    <div class="card-body cardtwo">
         <form method="GET" action="relatorios.php" class="mb-4">
             <div class="row g-3">
                 <div class="col-md-3">

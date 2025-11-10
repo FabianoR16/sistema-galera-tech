@@ -260,7 +260,7 @@ include 'includes/header.php';
                     <?php echo isset($aluno) ? '<i class="fas fa-edit"></i> Editar Aluno' : '<i class="fas fa-plus-circle"></i> Novo Aluno'; ?>
                 </h5>
             </div>
-            <div class="card-body">
+            <div class="card-body cardtwo">
                 <form method="post" action="">
                     <?php if (isset($aluno)): ?>
                         <input type="hidden" name="id" value="<?php echo $aluno['id']; ?>">
@@ -409,7 +409,7 @@ include 'includes/header.php';
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0"><i class="fas fa-list"></i> Alunos Cadastrados</h5>
             </div>
-            <div class="card-body">
+            <div class="card-body cardtwo">
                 <!-- Filtros -->
                 <form method="get" action="" class="mb-4">
                     <div class="row g-2">

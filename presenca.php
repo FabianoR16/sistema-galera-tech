@@ -313,7 +313,7 @@ include 'includes/header.php';
     <div class="card mb-4">
         <div class="card-body">
             <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i> Selecione uma aula para registrar presença ou crie uma nova aula.
+                <i class="fas fa-info-circle"></i> ­   Selecione uma aula para registrar presença ou crie uma nova aula.
             </div>
         </div>
     </div>
@@ -324,7 +324,7 @@ include 'includes/header.php';
     <div class="card-header bg-primary text-white">
         <h5 class="mb-0"><i class="fas fa-history"></i> Aulas Recentes</h5>
     </div>
-    <div class="card-body">
+    <div class="card-body cardtwo">
         <?php if ($aulas_recentes && $aulas_recentes->num_rows > 0): ?>
             <div class="table-responsive">
                 <table class="table table-hover">
