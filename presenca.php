@@ -207,6 +207,132 @@ $aulas_recentes = $conn->query($query_aulas_recentes);
 include 'includes/header.php';
 ?>
 
+<style>
+    /* ===== Cards e tabela modernizados ===== */
+    .card {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 6px 18px rgba(10, 10, 10, 0.06);
+        overflow: hidden;
+    }
+
+    #progressLabel{
+        margin-top: 30px;
+    }
+
+    .card-header {
+        background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        color: #fff;
+        border-bottom: none;
+        font-weight: 600;
+    }
+
+    .card-body.cardtwo {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), 
+        transparent);
+    }
+
+    /* Tabela */
+    .table td,
+    .table th {
+        padding: 12px 14px;
+        vertical-align: middle;
+        border-top: none;
+    }
+
+    .table-hover tbody tr:hover {
+        background: rgba(0, 0, 0, 0.03);
+        transition: background .15s ease;
+    }
+
+    /* Avatares iniciais */
+    .avatar-initial {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        margin-right: 10px;
+        text-transform: uppercase;
+    }
+
+    /* Progresso da chamada */
+    .presence-progress {
+        height: 10px;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #f1f5f9;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        margin-bottom: 60px;
+        border: 1px solid black;
+    }
+
+    .presence-progress .bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #10b981, #34d399);
+        transition: width .3s ease;
+    }
+
+    .borda{
+        border: 1px solid #60a5fa;
+        border-top: none;
+        border-bottom: none;
+    }
+
+    .b2{
+                border: 1px solid #60a5fa;
+        border-top: none;
+
+    }
+
+    .btn-esp{
+        margin-bottom: 30px;
+    }
+
+    /* Buttons & micro-interactions */
+    .btn:focus {
+        box-shadow: none !important;
+    }
+
+    .btn-primary {
+        border-radius: 8px;
+        padding: 10px 14px;
+    }
+
+    /* Toast customizado (centralizar visual) */
+    #appToast {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 2000;
+    }
+
+    /* SweetAlert override para cor do botão */
+    .swal2-confirm.swal2-styled {
+        background: #2563eb
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 768px) {
+
+        .table td,
+        .table th {
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .avatar-initial {
+            width: 32px;
+            height: 32px;
+        }
+    }
+</style>
+
 <div class="row mb-4">
     <div class="col-md-6">
         <h2><i class="fas fa-clipboard-check"></i> Registro de Presença</h2>
@@ -234,9 +360,21 @@ include 'includes/header.php';
                 <?php endif; ?>
             </h5>
         </div>
-        <div class="card-body cardtwo">
+
+        <!-- Barra de progresso da chamada -->
+        <div class="px-3 pt-3 borda">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <small id="progressLabel"> Alunos Presentes: 0 / 0</small>
+                <small id="progressPercent">0%</small>
+            </div>
+            <div class="presence-progress">
+                <div class="bar" id="presenceBar" style="width:0%"></div>
+            </div>
+        </div>
+
+        <div class="borda b2">
             <?php if ($alunos && $alunos->num_rows > 0): ?>
-                <form method="post" action="">
+                <form method="post" action="" id="formPresenca">
                     <input type="hidden" name="aula_id" value="<?php echo $aula['id']; ?>">
 
                     <div class="table-responsive">
@@ -250,7 +388,7 @@ include 'includes/header.php';
                             </thead>
                             <tbody>
                                 <?php while ($aluno = $alunos->fetch_assoc()): ?>
-                                    <tr>
+                                    <tr data-aluno-id="<?php echo $aluno['id']; ?>">
                                         <td>
                                             <?php echo $aluno['nome']; ?>
                                             <?php if ($aluno['user_genero'] == 'feminino'): ?>
@@ -297,7 +435,7 @@ include 'includes/header.php';
                     </div>
 
                     <div class="text-center mt-3">
-                        <button type="submit" name="registrar_presenca" class="btn btn-success btn-lg">
+                        <button type="submit" name="registrar_presenca" class="btn btn-success btn-lg btn-esp">
                             <i class="fas fa-save"></i> Salvar Registro de Presença
                         </button>
                     </div>
@@ -313,7 +451,7 @@ include 'includes/header.php';
     <div class="card mb-4">
         <div class="card-body">
             <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i> ­   Selecione uma aula para registrar presença ou crie uma nova aula.
+                <i class="fas fa-info-circle"></i> ­ Selecione uma aula para registrar presença ou crie uma nova aula.
             </div>
         </div>
     </div>
@@ -353,7 +491,7 @@ include 'includes/header.php';
                                         data-bs-toggle="modal" data-bs-target="#modalEditarAula">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <form method="post" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta aula?')">
+                                    <form method="post" style="display: inline;" class="form-excluir-aula">
                                         <input type="hidden" name="aula_id" value="<?php echo $aula_recente['id']; ?>">
                                         <button type="submit" name="excluir_aula" class="btn btn-sm btn-danger">
                                             <i class="fas fa-trash"></i>
@@ -470,6 +608,19 @@ include 'includes/header.php';
     </div>
 </div>
 
+<!-- Toast para notificações -->
+<div id="appToast" aria-live="polite" aria-atomic="true">
+    <div class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true" id="mainToast">
+        <div class="d-flex">
+            <div class="toast-body" id="mainToastBody"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
+        </div>
+    </div>
+</div>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     // Função para editar aula
     function editarAula(aulaId, turmaId, tema, data) {
@@ -480,11 +631,128 @@ include 'includes/header.php';
         document.getElementById('edit_data').value = data;
     }
 
-    // Inicializar datepicker para o campo de data
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     // Aqui você pode adicionar código para inicializar um datepicker se necessário
-    //     // Por exemplo, usando jQuery UI ou outro plugin
-    // });
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // ---------- Função para atualizar progresso ----------
+        function atualizarProgresso() {
+            const rows = document.querySelectorAll('table tbody tr[data-aluno-id]');
+            const total = rows.length;
+            let marcados = 0;
+
+            rows.forEach(row => {
+                const id = row.getAttribute('data-aluno-id');
+                const presente = document.getElementById('presente_' + id);
+                if (presente && presente.checked) marcados++;
+            });
+
+            const percent = total ? Math.round((marcados / total) * 100) : 0;
+            const bar = document.getElementById('presenceBar');
+            const label = document.getElementById('progressLabel');
+            const pct = document.getElementById('progressPercent');
+
+            if (bar) bar.style.width = percent + '%';
+            if (label) label.innerText = 'Alunos Presentes: ' + marcados + ' / ' + total;
+            if (pct) pct.innerText = percent + '%';
+        }
+
+        // Inicializa progresso
+        atualizarProgresso();
+
+        // Recalcula quando qualquer radio muda
+        document.querySelectorAll('input[type=radio]').forEach(radio => {
+            radio.addEventListener('change', atualizarProgresso);
+        });
+
+        // ---------- Clique na linha para selecionar Presente (UX) ----------
+        document.querySelectorAll('table tbody tr[data-aluno-id]').forEach(row => {
+            row.addEventListener('click', function(e) {
+                const targetTag = e.target.tagName.toLowerCase();
+                if (['input', 'button', 'textarea', 'select', 'a', 'label', 'i'].includes(targetTag)) return;
+
+                const alunoId = this.getAttribute('data-aluno-id');
+                const presente = document.getElementById('presente_' + alunoId);
+                if (presente) presente.checked = true;
+                atualizarProgresso();
+            });
+        });
+
+        // ---------- Intercepta envio do form de presenças e confirma com SweetAlert ----------
+        const formPresenca = document.getElementById('formPresenca');
+        if (formPresenca) {
+            formPresenca.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Salvar presenças?',
+                    text: "Deseja confirmar o registro das presenças?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, salvar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Salvando...',
+                            allowOutsideClick: false,
+                            didOpen: () => Swal.showLoading()
+                        });
+                        this.submit();
+                    }
+                });
+            });
+        }
+
+        // ---------- Intercepta exclusão de aula e confirma ----------
+        document.querySelectorAll('.form-excluir-aula').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Excluir aula?',
+                    text: "Essa ação removerá a aula e todas as presenças relacionadas.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, excluir',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Excluindo...',
+                            allowOutsideClick: false,
+                            didOpen: () => Swal.showLoading()
+                        });
+                        this.submit();
+                    }
+                });
+            });
+        });
+
+        // ---------- Mostrar toast se houver mensagem do PHP ----------
+        <?php if (!empty($mensagem)): ?>
+            const toastEl = document.getElementById('mainToast');
+            const toastBody = document.getElementById('mainToastBody');
+            if (toastEl && toastBody) {
+                const tmpDiv = document.createElement('div');
+                tmpDiv.innerHTML = <?php echo json_encode($mensagem); ?>;
+                const text = tmpDiv.textContent || tmpDiv.innerText || '';
+                toastBody.innerText = text;
+                const toast = new bootstrap.Toast(toastEl, {
+                    delay: 3500
+                });
+                toast.show();
+            }
+        <?php endif; ?>
+
+        // ---------- Pequeno ajuste: permitir clicar em label para focar input -----------
+        document.querySelectorAll('.form-check-label').forEach(lbl => {
+            lbl.addEventListener('click', function(e) {
+                const forAttr = this.getAttribute('for');
+                if (!forAttr) return;
+                const el = document.getElementById(forAttr);
+                if (el) el.checked = true;
+                atualizarProgresso();
+            });
+        });
+
+    });
 </script>
 
 <?php

@@ -1,8 +1,30 @@
 <?php
 require_once 'config/database.php';
 require_once 'config/init_db.php';
+require_once 'includes/functions.php';
 
-echo "<h1>Verificação do Banco de Dados</h1>";
+//Opcional
+// Iniciar sessão e verificar login
+iniciarSessao();
+verificarLogin();
+
+// Verificar permissões (apenas admin pode acessar)
+if ($_SESSION['usuario_perfil'] != 'admin') {
+    header("Location: index.php");
+    exit;
+}
+
+// Incluir cabeçalho
+include 'includes/header.php';
+?>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <h2><i class="fas fa-database"></i> Verificação do Banco de Dados</h2>
+    </div>
+</div>
+
+<?php 
 
 // Verificar conexão com o banco
 echo "<h2>Verificando conexão com o banco de dados...</h2>";
@@ -79,7 +101,9 @@ if (!empty($tabelas_faltando) || !$admin_existe) {
     echo "<p><strong>Senha:</strong> admin123</p>";
 }
 
-echo "<p><a href='login.php' class='btn btn-primary'>Voltar para o Login</a></p>";
+echo "<p><a class='btn btn-info' href='configuracoes.php'>Voltar</a></p><p><a class='btn btn-info' href='login.php' class='btn btn-primary'>Voltar para o Login</a></p>";
+
 
 $conn->close();
+include 'includes/footer.php'; 
 ?>
