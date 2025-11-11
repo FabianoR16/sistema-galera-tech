@@ -234,7 +234,7 @@ include 'includes/header.php';
                 <?php endif; ?>
             </h5>
         </div>
-        <div class="card-body">
+        <div class="card-body cardtwo">
             <?php if ($alunos && $alunos->num_rows > 0): ?>
                 <form method="post" action="">
                     <input type="hidden" name="aula_id" value="<?php echo $aula['id']; ?>">

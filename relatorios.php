@@ -41,21 +41,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['filtrar'])) {
     $join_aluno = "";
     
     if ($escola_id > 0) {
-        if ($tipo_relatorio == 'presenca') {
-            $condicoes[] = "t.escola_id = $escola_id";
-            $join_turma = " INNER JOIN turmas t ON a.turma_id = t.id";
-        } else {
-            $condicoes[] = "t.escola_id = $escola_id";
-            $join_turma = " INNER JOIN turmas t ON adv.turma_id = t.id";
-        }
+        // Para presença, filtra pela escola da turma vinculada à aula
+        // Para advertência, filtra pela escola da turma vinculada ao aluno
+        $condicoes[] = "t.escola_id = $escola_id";
     }
     
     if ($turma_id > 0) {
-        if ($tipo_relatorio == 'presenca') {
-            $condicoes[] = "p.turma_id = $turma_id";
-        } else {
-            $condicoes[] = "adv.turma_id = $turma_id";
-        }
+        // Em presença, a turma vem da aula; em advertência, da turma do aluno
+        $condicoes[] = "t.id = $turma_id";
     }
     
     if (!empty($data_inicio)) {
@@ -80,14 +73,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['filtrar'])) {
     
     // Relatório de Presença
     if ($tipo_relatorio == 'presenca') {
-        $colunas = ['Aluno', 'Turma', 'Data', 'Aula', 'Presente'];
+        $colunas = ['Aluno', 'Turma', 'Data', 'Tema', 'Presente'];
         
         $sql = "SELECT 
                 al.nome as aluno_nome, 
                 t.nome as turma_nome, 
                 a.data, 
-                a.descricao as aula_descricao,
-                CASE WHEN p.presente = 1 THEN 'Sim' ELSE 'Não' END as presente
+                a.tema as aula_tema,
+                CASE WHEN p.status = 'presente' THEN 'Sim' ELSE 'Não' END as presente
             FROM presencas p
             INNER JOIN alunos al ON p.aluno_id = al.id
             INNER JOIN aulas a ON p.aula_id = a.id
@@ -109,8 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['filtrar'])) {
                 u.nome as usuario_nome
             FROM advertencias adv
             INNER JOIN alunos al ON adv.aluno_id = al.id
-            INNER JOIN turmas t ON adv.turma_id = t.id
-            INNER JOIN tipos_advertencia ta ON adv.tipo_advertencia_id = ta.id
+            INNER JOIN turmas t ON al.turma_id = t.id
+            INNER JOIN tipos_advertencia ta ON adv.tipo_id = ta.id
             INNER JOIN usuarios u ON adv.usuario_id = u.id
             $where
             ORDER BY adv.data DESC, t.nome, al.nome";
@@ -130,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['filtrar'])) {
     <div class="card-header bg-primary text-white">
         <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Relatórios</h5>
     </div>
-    <div class="card-body cardtwo">
+    <div class="card-body">
         <form method="GET" action="relatorios.php" class="mb-4">
             <div class="row g-3">
                 <div class="col-md-3">

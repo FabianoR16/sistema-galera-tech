@@ -1,177 +1,212 @@
 /* Estilos personalizados para o Sistema Galera Tech */
 
 :root {
-  --primary-color: #3498db;
+  --primary-color: #2d8cff;
   --secondary-color: #2ecc71;
-  --accent-color: #f39c12;
+  --accent-color: #aa6a04;
   --danger-color: #e74c3c;
-  --light-color: #f8f9fa;
+  --bg-light: #f7f9fc;
+  --text-color: #222;
   --dark-color: #343a40;
   --blue: #116aa5;
 }
 
 body {
-  background-color: #f5f7fa;
-  color: #333;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-color);
+  font-family: "Inter", "Segoe UI", Tahoma, sans-serif;
+  letter-spacing: -0.3px;
+  
 }
 
-/* Header e Navbar */
+/* HEADER / NAVBAR */
 header {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: #fff !important;
+  border-bottom: 1px solid #e7e7e7;
+  box-shadow: none;
 }
 
 .navbar-brand img {
   max-height: 50px;
 }
 
+
 .navbar-light .navbar-nav .nav-link {
   color: #555;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
+  font-weight: 400;
+  padding: .5rem 1rem;
+  transition: .3s ease;
 }
 
 .navbar-light .navbar-nav .nav-link:hover {
   color: var(--primary-color);
+  transition: transform 0.7s ease;
+  transform: scale(1.1);
 }
 
-/* Cards e Containers */
+/* TITULOS */
+h1, h2, h3, h4 {
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  color: #111;
+}
+
+/* CARDS / CONTAINERS */
 .card {
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1.5rem;
-  border: none;
+    box-shadow: none !important;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: none !important;              
+    margin-top: 40px;
 }
 
 .card-header {
-  border-radius: 8px 8px 0 0 !important;
-  font-weight: 600;
+  border-radius: 14px 14px 0 0 !important;
+  background: transparent !important;
+  border-bottom: 1px solid #ececec;
+  font-weight: 500;
+  border-bottom: 1px solid #e5e7eb !important;
+  margin-bottom: -20px;
 }
 
 .card-body {
   padding: 1.5rem;
+    border: 2px solid #d4d4d4;
+    border-color: rgba(0,0,0,0.12);
+    border-top: none;       
+    border-radius: 0 0 14px 14px;
+    padding-bottom: 25px;
 }
 
-/* Botões */
-.btn {
-  border-radius: 5px;
+.cardtwo{
+  border: 1px solid var(--primary-color);
+  border-top: none;
+  border-radius: 12px;
+}
+
+/* TABELAS */
+.table {
+  border: none;
+  border-collapse: separate;
+  border-spacing: 15px;
+}
+
+.table th {
+  background: transparent;
+  border-bottom: 1px solid #20202048;
   font-weight: 500;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background: transparent;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0,0,0,0.03);
+}
+
+/* BOTOES */
+.btn {
+  border-radius: 8px;
+  padding: .45rem .9rem;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  transition: all .2s ease;
+}
+
+.btn:hover{
+  transition: all 1.0s ease;
+  transform: scale(1.1);
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
+  background: var(--primary-color);
   border-color: var(--primary-color);
 }
-
 .btn-primary:hover {
-  /* background-color: #2980b9; */
+  background: transparent;
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-warning{
+  background-color: rgb(173, 50, 5);
+  border: 1px solid #202020;
+  color: white;
+}
+
+.btn-warning:hover{
+  transform: scale(1.1);
+  border: 1px solid #202020;
   background-color: transparent;
-  border-color: #1b1b1ba0;
-  /* color: #1b1b1ba0; */
-  color: #3498db;
 }
 
 .btn-success {
-  background-color: var(--secondary-color);
-  border-color: var(--secondary-color);
-}
-
-.btn-success:hover {
-  background-color: #27ae60;
-  border-color: #27ae60;
+  background: #037a34;
+  color: white;
+  border: none;
 }
 
 .btn-danger {
-  background-color: var(--danger-color);
-  border-color: var(--danger-color);
+  background: transparent;
+  border: 1px solid var(--danger-color);
+  color: var(--danger-color);
 }
-
 .btn-danger:hover {
-  background-color: #c0392b;
-  border-color: #c0392b;
+  background: var(--danger-color);
+  color: #fff;
 }
 
-
-/* Formulários */
+/* FORMULÁRIOS */
 .form-control,
 .form-select {
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid gray;
+  background: #fff;
 }
 
 .form-control:focus,
 .form-select:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+  box-shadow: none;
+  transform: scale(1.05);
 }
 
-/* Tabelas */
-.table {
-  border-collapse: separate;
-  border-spacing: 0;
-  border: 1px solid rgba(0, 0, 0, 0.176);
-  border-radius: 6px;
-}
-
-.table th { 
-  background-color: #f8f9fa;
-  font-weight: 600;
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.02);
-}
-
-.table-hover tbody tr:hover {
-  background-color: rgba(52, 152, 219, 0.05);
-}
-
-/* Badges */
-.badge {
-  font-weight: 500;
-  padding: 0.35em 0.65em;
-  border-radius: 4px;
-}
-
-/* Alertas */
+/* ALERTAS */
 .alert {
-  border-radius: 8px;
-  border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: #fff;
+  border-left: 4px solid var(--primary-color);
+  border-radius: 12px;
+  box-shadow: none;
 }
 
-/* Modais */
+/* MODAIS */
 .modal-content {
-  border-radius: 8px;
+  border-radius: 12px;
   border: none;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
 }
 
 .modal-header {
-  border-radius: 8px 8px 0 0;
+  border-bottom: none;
 }
 
-/* Footer */
+/* FOOTER */
 footer {
-  background-color: #fff;
-  border-top: 1px solid #eee;
+  background: transparent;
+  border-top: 1px solid #e7e7e7;
   padding: 1rem 0;
   margin-top: 2rem;
+  color: #666;
 }
 
-/* Responsividade */
+/* RESPONSIVIDADE */
 @media (max-width: 768px) {
-  .card-body {
-    padding: 1rem;
-  }
-
-  .table-responsive {
-    font-size: 0.9rem;
-  }
+  h1 { font-size: 1.4rem; }
+  .card { border-radius: 12px; }
+  .card-body { padding: 1rem; }
+  .table-responsive { font-size: .9rem; }
 }
 
 /* Animações */
