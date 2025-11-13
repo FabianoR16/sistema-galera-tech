@@ -235,6 +235,7 @@ $conn->close();
 include 'includes/header.php';
 ?>
 
+
 <div class="row mb-4">
     <div class="col-md-6">
         <h2><i class="fas fa-user-graduate"></i> Cadastro de Alunos</h2>
@@ -511,6 +512,8 @@ include 'includes/header.php';
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
+
+                
                             </tbody>
                         </table>
                     </div>
@@ -524,11 +527,43 @@ include 'includes/header.php';
     </div>
 </div>
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
 <script>
-    // Inicializar datepicker para o campo de data
-    document.addEventListener('DOMContentLoaded', function() {
-        // Aqui você pode adicionar código para inicializar um datepicker se necessário
-    });
+   document.addEventListener('DOMContentLoaded', function() {
+  const toggle = document.getElementById('theme-toggle');
+  if (!toggle) return;
+
+  // Inicializa ícone com base no tema salvo
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') {
+    document.body.classList.add('dark');
+    toggle.textContent = '☀️';
+  } else {
+    document.body.classList.remove('dark');
+    toggle.textContent = '🌙';
+  }
+
+  // Alterna tema ao clicar
+  toggle.addEventListener('click', function() {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    toggle.textContent = isDark ? '☀️' : '🌙';
+  });
+
+  // Optional: detect system preference on first visit (if no saved value)
+  if (!saved) {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (prefersDark) {
+      document.body.classList.add('dark');
+      toggle.textContent = '☀️';
+      localStorage.setItem('theme', 'dark');
+    }
+  }
+});
 </script>
 
 <?php include 'includes/footer.php'; ?>

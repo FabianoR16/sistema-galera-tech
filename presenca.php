@@ -634,26 +634,32 @@ include 'includes/header.php';
     document.addEventListener('DOMContentLoaded', function() {
 
         // ---------- Função para atualizar progresso ----------
-        function atualizarProgresso() {
-            const rows = document.querySelectorAll('table tbody tr[data-aluno-id]');
-            const total = rows.length;
-            let marcados = 0;
+function atualizarProgresso() {
+    const rows = document.querySelectorAll('table tbody tr[data-aluno-id]');
+    const total = rows.length;
+    let marcados = 0;
 
-            rows.forEach(row => {
-                const id = row.getAttribute('data-aluno-id');
-                const presente = document.getElementById('presente_' + id);
-                if (presente && presente.checked) marcados++;
-            });
+    rows.forEach(row => {
+        const id = row.getAttribute('data-aluno-id');
 
-            const percent = total ? Math.round((marcados / total) * 100) : 0;
-            const bar = document.getElementById('presenceBar');
-            const label = document.getElementById('progressLabel');
-            const pct = document.getElementById('progressPercent');
+        const presente = document.getElementById('presente_' + id);
+        const atraso   = document.getElementById('atraso_' + id);
 
-            if (bar) bar.style.width = percent + '%';
-            if (label) label.innerText = 'Alunos Presentes: ' + marcados + ' / ' + total;
-            if (pct) pct.innerText = percent + '%';
+        // Agora atraso também é contado como presente ✅
+        if ((presente && presente.checked) || (atraso && atraso.checked)) {
+            marcados++;
         }
+    });
+
+    const percent = total ? Math.round((marcados / total) * 100) : 0;
+    const bar = document.getElementById('presenceBar');
+    const label = document.getElementById('progressLabel');
+    const pct = document.getElementById('progressPercent');
+
+    if (bar) bar.style.width = percent + '%';
+    if (label) label.innerText = 'Alunos Presentes: ' + marcados + ' / ' + total;
+    if (pct) pct.innerText = percent + '%';
+}
 
         // Inicializa progresso
         atualizarProgresso();
@@ -662,7 +668,7 @@ include 'includes/header.php';
         document.querySelectorAll('input[type=radio]').forEach(radio => {
             radio.addEventListener('change', atualizarProgresso);
         });
-
+ 
         // ---------- Clique na linha para selecionar Presente (UX) ----------
         document.querySelectorAll('table tbody tr[data-aluno-id]').forEach(row => {
             row.addEventListener('click', function(e) {
